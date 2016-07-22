@@ -35,7 +35,7 @@ setup(
     ],
     author='Andrew Svetlov',
     author_email='andrew.svetlov@gmail.com',
-    url='https://github.com/aio-libs/multidict/',
+    url='https://github.com/aio-libs/pytest-aiohttp/',
     license='Apache 2',
     install_requires=[
         'pytest',
@@ -46,3 +46,4 @@ setup(
         'pytest11': ['aiohttp = pytest_aiohttp'],
     },
 )
+
