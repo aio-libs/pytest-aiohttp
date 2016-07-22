@@ -3,17 +3,19 @@ pytest-aiohttp
 
 pytest plugin for aiohttp support
 
-The library allows to use [aiohttp pytest
-pugin](http://aiohttp.readthedocs.io/en/stable/testing.html#pytest-example)
+The library allows to use `aiohttp pytest pugin
+<http://aiohttp.readthedocs.io/en/stable/testing.html#pytest-example>`_
 without need for implicitly loading it like `pytest_plugins =
 'aiohttp.pytest_plugin'`.
 
 
-Just run:
+
+
+Just run::
 
     $ pip install pytest-aiohttp
 
-and write tests with the plugin support:
+and write tests with the plugin support::
 
     from aiohttp import web
 
