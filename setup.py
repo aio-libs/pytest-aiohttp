@@ -46,4 +46,3 @@ setup(
         'pytest11': ['aiohttp = pytest_aiohttp'],
     },
 )
-
