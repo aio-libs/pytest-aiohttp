@@ -11,11 +11,15 @@ without need for implicitly loading it like `pytest_plugins =
 
 
 
-Just run::
+Just run:
+
+.. code-block:: console
 
     $ pip install pytest-aiohttp
 
-and write tests with the plugin support::
+and write tests with the plugin support:
+
+.. code-block:: python
 
     from aiohttp import web
 
