@@ -32,6 +32,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Testing',
         'Framework :: Pytest',
+        'Framework :: AsyncIO',
     ],
     author='Andrew Svetlov',
     author_email='andrew.svetlov@gmail.com',
