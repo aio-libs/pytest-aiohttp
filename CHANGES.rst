@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+0.2.0 (2017-11-30)
+------------------
+
+- Fix backward incompatibility changes introduced by `pytest` 3.3+
+
 0.1.3 (2016-09-08)
 ------------------
 
