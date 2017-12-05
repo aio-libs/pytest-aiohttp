@@ -30,6 +30,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Software Development :: Testing',
         'Framework :: Pytest',
         'Framework :: AsyncIO',
@@ -40,7 +41,7 @@ setup(
     license='Apache 2',
     install_requires=[
         'pytest',
-        'aiohttp>=0.22.0'
+        'aiohttp>=2.3.5'
     ],
     packages=['pytest_aiohttp'],
     entry_points={
