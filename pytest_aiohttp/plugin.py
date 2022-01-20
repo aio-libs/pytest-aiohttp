@@ -10,6 +10,24 @@ from aiohttp.web import Application, BaseRequest, StreamResponse
 AiohttpClient = Callable[[Union[Application, BaseTestServer]], Awaitable[TestClient]]
 
 
+LEGACY_MODE = DeprecationWarning(
+    "The 'asyncio_mode' is 'legacy', switching to 'auto' for the sake of "
+    "pytest-aiohttp backward compatibility. "
+    "Please explicitly use 'asyncio_mode=strict' or 'asyncio_mode=auto' "
+    "in pytest configuration file."
+)
+
+
+@pytest.mark.tryfirst
+def pytest_configure(config) -> None:
+    val = config.getoption("asyncio_mode")
+    if val is None:
+        val = config.getini("asyncio_mode")
+    if val == "legacy":
+        config.option.asyncio_mode = "auto"
+        config.issue_config_time_warning(LEGACY_MODE, stacklevel=2)
+
+
 @pytest.fixture
 def loop(event_loop: asyncio.AbstractEventLoop) -> asyncio.AbstractEventLoop:
     warnings.warn(

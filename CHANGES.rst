@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+1.0.2 (2022-01-20)
+------------------
+
+- Restore implicit switch to ``asyncio_mode = auto`` if *legacy* mode is detected.
+
 1.0.1 (2022-01-20)
 ------------------
 
