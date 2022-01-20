@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+1.0.0 (2022-1-20)
+------------------
+
+- The plugin is compatible with ``pytest-asyncio`` now.  It uses ``pytest-asyncio`` for
+  async tests running and async fixtures support, providing by itself only fixtures for
+  creating aiohttp test server and client.
+
 0.2.0 (2017-11-30)
 ------------------
 
