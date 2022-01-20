@@ -3,37 +3,54 @@ pytest-aiohttp
 
 pytest plugin for aiohttp support
 
-The library allows to use `aiohttp pytest plugin
-<http://aiohttp.readthedocs.io/en/stable/testing.html#pytest-example>`_
-without need for explicit loading it like `pytest_plugins =
-'aiohttp.pytest_plugin'`.
+The library provides useful fixtures for creation test aiohttp server and client.
 
 
-
-
-Just run:
+Installation
+------------
 
 .. code-block:: console
 
     $ pip install pytest-aiohttp
 
-and write tests with the plugin support:
+Add ``asyncio_mode = auto`` line to `pytest configuration
+<https://docs.pytest.org/en/latest/customize.html>`_ (see `pytest-asyncio modes
+<https://github.com/pytest-dev/pytest-asyncio#modes>`_ for details).  The plugin works
+with ``strict`` mode also.
+
+
+
+Usage
+-----
+
+Write tests in `pytest-asyncio <https://github.com/pytest-dev/pytest-asyncio>`_ style
+using provided fixtures for aiohttp test server and client creation. The plugin provides
+resources cleanup out-of-the-box.
+
+The simple usage example:
 
 .. code-block:: python
 
     from aiohttp import web
 
+
     async def hello(request):
-        return web.Response(body=b'Hello, world')
+        return web.Response(body=b"Hello, world")
+
 
     def create_app(loop):
         app = web.Application(loop=loop)
-        app.router.add_route('GET', '/', hello)
+        app.router.add_route("GET", "/", hello)
         return app
+
 
     async def test_hello(test_client):
         client = await test_client(create_app)
-        resp = await client.get('/')
+        resp = await client.get("/")
         assert resp.status == 200
         text = await resp.text()
-        assert 'Hello, world' in text
+        assert "Hello, world" in text
+
+
+See `aiohttp documentation <https://docs.aiohttp.org/en/stable/testing.html#pytest>` for
+more details about fixtures usage.
