@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+1.0.1 (2022-01-20)
+------------------
+
+- Don't implicitly switch from legacy to auto asyncio_mode, the integration doesn't work
+  well.
+
 1.0.0 (2022-1-20)
 ------------------
 
