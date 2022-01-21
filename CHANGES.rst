@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+1.0.3 (2022-01-03)
+------------------
+
+- Fix ``loop`` and ``proactor_loop`` fixtures.
+  `#22 <https://github.com/aio-libs/pytest-aiohttp/issue/22>`_
+
 1.0.2 (2022-01-20)
 ------------------
 
