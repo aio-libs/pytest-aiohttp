@@ -35,7 +35,7 @@ def loop(event_loop: asyncio.AbstractEventLoop) -> asyncio.AbstractEventLoop:
         "please use 'event_loop' instead",
         DeprecationWarning,
     )
-    return loop
+    return event_loop
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ def proactor_loop(event_loop: asyncio.AbstractEventLoop) -> asyncio.AbstractEven
         "please use 'event_loop' instead",
         DeprecationWarning,
     )
-    return loop
+    return event_loop
 
 
 @pytest.fixture
