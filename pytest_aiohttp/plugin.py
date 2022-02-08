@@ -135,7 +135,7 @@ def aiohttp_client_cls() -> Type[TestClient]:
     return TestClient
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def aiohttp_client(
     aiohttp_client_cls: Type[TestClient],
 ) -> Generator[AiohttpClient, None, None]:
