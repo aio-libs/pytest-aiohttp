@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+1.0.4 (2022-02-12)
+------------------
+
+- Fix failure with ``aiohttp_client`` fixture usage when ``asyncio_mode=strict``.
+  `#25 <https://github.com/aio-libs/pytest-aiohttp/issue/25>`_
+
 1.0.3 (2022-01-03)
 ------------------
 
