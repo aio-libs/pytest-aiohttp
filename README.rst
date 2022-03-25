@@ -45,7 +45,7 @@ The simple usage example:
 
 
     async def test_hello(aiohttp_client):
-        client = await aiohttp_client(await create_app())
+        client = await aiohttp_client(create_app())
         resp = await client.get("/")
         assert resp.status == 200
         text = await resp.text()
