@@ -1,7 +1,7 @@
 ---
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.2.0
+  rev: v4.3.0
   hooks:
   - id: check-merge-conflict
     exclude: rst$
@@ -10,7 +10,7 @@ repos:
   hooks:
   - id: yesqa
 - repo: https://github.com/Zac-HD/shed
-  rev: 0.10.0     # 0.7 does not support Python 3.7
+  rev: 0.10.1     # 0.7 does not support Python 3.7
   hooks:
   - id: shed
     args:
@@ -25,7 +25,7 @@ repos:
   - id: yamlfmt
     args: [--mapping, '2', --sequence, '2', --offset, '0']
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.2.0
+  rev: v4.3.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
