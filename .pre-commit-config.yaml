@@ -45,8 +45,8 @@ repos:
   rev: v1.9.0
   hooks:
   - id: python-use-type-annotations
-- repo: https://github.com/sirosen/check-jsonschema
-  rev: 0.18.4
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.19.2
   hooks:
   - id: check-github-actions
   - id: check-github-workflows
