@@ -18,7 +18,7 @@ LEGACY_MODE = DeprecationWarning(
 )
 
 
-@pytest.mark.tryfirst
+@pytest.hookimpl(tryfirst=True)
 def pytest_configure(config) -> None:
     val = config.getoption("asyncio_mode")
     if val is None:
