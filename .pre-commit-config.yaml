@@ -6,11 +6,11 @@ repos:
   - id: check-merge-conflict
     exclude: rst$
 - repo: https://github.com/asottile/yesqa
-  rev: v1.4.0
+  rev: v1.5.0
   hooks:
   - id: yesqa
 - repo: https://github.com/Zac-HD/shed
-  rev: 0.10.9     # 0.7 does not support Python 3.7
+  rev: 2023.6.1     # 0.7 does not support Python 3.7
   hooks:
   - id: shed
     args:
@@ -20,7 +20,7 @@ repos:
     - markdown
     - rst
 - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-  rev: 0.2.2
+  rev: 0.2.3
   hooks:
   - id: yamlfmt
     args: [--mapping, '2', --sequence, '2', --offset, '0']
@@ -37,7 +37,7 @@ repos:
   - id: check-yaml
   - id: debug-statements
 - repo: https://github.com/PyCQA/flake8
-  rev: 6.0.0
+  rev: 6.1.0
   hooks:
   - id: flake8
     language_version: python3
@@ -46,7 +46,7 @@ repos:
   hooks:
   - id: python-use-type-annotations
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.21.0
+  rev: 0.26.3
   hooks:
   - id: check-github-actions
   - id: check-github-workflows
