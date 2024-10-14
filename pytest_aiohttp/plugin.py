@@ -1,6 +1,7 @@
 import asyncio
 import warnings
-from typing import Any, Awaitable, Callable, Dict, Generator, Optional, Type, Union
+from collections.abc import Awaitable, Generator
+from typing import Any, Callable, Dict, Optional, Type, Union
 
 import pytest
 import pytest_asyncio
@@ -160,7 +161,7 @@ async def aiohttp_client(
         elif isinstance(__param, BaseTestServer):
             client = aiohttp_client_cls(__param, **kwargs)
         else:
-            raise ValueError("Unknown argument type: %r" % type(__param))
+            raise ValueError(f"Unknown argument type: {type(__param)!r}")
 
         await client.start_server()
         clients.append(client)
