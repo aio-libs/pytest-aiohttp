@@ -1,11 +1,11 @@
-from typing import Any
+import pytest
 
 from pytest_aiohttp.plugin import LEGACY_MODE
 
 pytest_plugins: str = "pytester"
 
 
-def test_warning_for_legacy_mode(testdir: Any) -> None:
+def test_warning_for_legacy_mode(testdir: pytest.Testdir) -> None:
     testdir.makepyfile(
         """\
 async def test_a():
@@ -18,7 +18,7 @@ async def test_a():
     result.stdout.fnmatch_lines(["*" + str(LEGACY_MODE) + "*"])
 
 
-def test_auto_mode(testdir: Any) -> None:
+def test_auto_mode(testdir: pytest.Testdir) -> None:
     testdir.makepyfile(
         """\
 async def test_a():
@@ -31,7 +31,7 @@ async def test_a():
     result.stdout.no_fnmatch_line("*" + str(LEGACY_MODE) + "*")
 
 
-def test_strict_mode(testdir: Any) -> None:
+def test_strict_mode(testdir: pytest.Testdir) -> None:
     testdir.makepyfile(
         """\
 import pytest
