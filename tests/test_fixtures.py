@@ -1,15 +1,17 @@
-from typing import Any
+import pytest
 
-pytest_plugins: str = "pytester"
+pytest_plugins = "pytester"
 
 
-def test_aiohttp_plugin(testdir: Any) -> None:
+def test_aiohttp_plugin(testdir: pytest.Testdir) -> None:
     testdir.makepyfile(
         """\
 import pytest
 from unittest import mock
 
 from aiohttp import web
+
+value = web.AppKey('value', str)
 
 
 async def hello(request):
@@ -54,11 +56,11 @@ async def test_noop() -> None:
 
 async def previous(request):
     if request.method == 'POST':
-        with pytest.warns(DeprecationWarning):
-            request.app['value'] = (await request.post())['value']
+        with pytest.deprecated_call():  # FIXME: this isn't actually called
+            request.app[value] = (await request.post())['value']
         return web.Response(body=b'thanks for the data')
     else:
-        v = request.app.get('value', 'unknown')
+        v = request.app.get(value, 'unknown')
         return web.Response(body='value: {}'.format(v).encode())
 
 
@@ -100,14 +102,13 @@ async def test_custom_port_test_server(aiohttp_server, unused_tcp_port):
     app = await create_app()
     server = await aiohttp_server(app, port=unused_tcp_port)
     assert server.port == unused_tcp_port
-
 """
     )
     result = testdir.runpytest("--asyncio-mode=auto")
     result.assert_outcomes(passed=8)
 
 
-def test_aiohttp_raw_server(testdir: Any) -> None:
+def test_aiohttp_raw_server(testdir: pytest.Testdir) -> None:
     testdir.makepyfile(
         """\
 import pytest
@@ -135,14 +136,13 @@ async def test_hello(cli) -> None:
     assert resp.status == 200
     text = await resp.text()
     assert 'OK' in text
-
 """
     )
     result = testdir.runpytest("--asyncio-mode=auto")
     result.assert_outcomes(passed=1)
 
 
-def test_aiohttp_client_cls_fixture_custom_client_used(testdir: Any) -> None:
+def test_aiohttp_client_cls_fixture_custom_client_used(testdir: pytest.Testdir) -> None:
     testdir.makepyfile(
         """
 import pytest
@@ -169,7 +169,7 @@ async def test_hello(aiohttp_client) -> None:
     result.assert_outcomes(passed=1)
 
 
-def test_aiohttp_client_cls_fixture_factory(testdir: Any) -> None:
+def test_aiohttp_client_cls_fixture_factory(testdir: pytest.Testdir) -> None:
     testdir.makeconftest(
         """\
 
