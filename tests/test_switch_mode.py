@@ -1,4 +1,5 @@
 import pytest
+
 from pytest_aiohttp.plugin import LEGACY_MODE
 
 pytest_plugins: str = "pytester"

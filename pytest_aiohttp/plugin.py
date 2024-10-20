@@ -1,8 +1,6 @@
-import asyncio
 from typing import (
     Any,
     Awaitable,
-    Callable,
     Dict,
     Iterator,
     Optional,
@@ -29,7 +27,7 @@ class AiohttpClient(Protocol):
         __param: Application,
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> TestClient[Request, Application]: ...
     @overload
     async def __call__(
@@ -37,7 +35,7 @@ class AiohttpClient(Protocol):
         __param: BaseTestServer[_Request],
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> TestClient[_Request, None]: ...
 
 
@@ -53,7 +51,7 @@ class AiohttpRawServer(Protocol):
         handler: _RequestHandler[BaseRequest],
         *,
         port: Optional[int] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Awaitable[RawTestServer]: ...
 
 
@@ -109,7 +107,7 @@ async def aiohttp_raw_server() -> Iterator[AiohttpRawServer]:
         handler: _RequestHandler[BaseRequest],
         *,
         port: Optional[int] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> RawTestServer:
         server = RawTestServer(handler, port=port)
         await server.start_server(**kwargs)
@@ -166,20 +164,20 @@ async def aiohttp_client(
         __param: Application,
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> TestClient[Request, Application]: ...
     @overload
     async def go(
         __param: BaseTestServer[_Request],
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> TestClient[_Request, None]: ...
     async def go(
         __param: Union[Application, BaseTestServer[Any]],
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> TestClient[Any, Any]:
         if isinstance(__param, Application):
             server_kwargs = server_kwargs or {}
