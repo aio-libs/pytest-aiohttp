@@ -49,7 +49,7 @@ class AiohttpServer(Protocol):
 class AiohttpRawServer(Protocol):
     def __call__(
         self,
-        handler: _RequestHandler[BaseRequest],
+        handler: _RequestHandler,  # TODO(aiohttp4): _RequestHandler[BaseRequest]
         *,
         port: Optional[int] = None,
         **kwargs: Any,
@@ -105,7 +105,7 @@ async def aiohttp_raw_server() -> Iterator[AiohttpRawServer]:
     servers = []
 
     async def go(
-        handler: _RequestHandler[BaseRequest],
+        handler: _RequestHandler,  # TODO(aiohttp4): _RequestHandler[BaseRequest]
         *,
         port: Optional[int] = None,
         **kwargs: Any,
