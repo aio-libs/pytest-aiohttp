@@ -1,13 +1,59 @@
-import asyncio
-import warnings
-from typing import Any, Awaitable, Callable, Dict, Generator, Optional, Type, Union
+from typing import (
+    Any,
+    Awaitable,
+    Dict,
+    Iterator,
+    Optional,
+    Protocol,
+    Type,
+    TypeVar,
+    Union,
+    overload,
+)
 
 import pytest
 import pytest_asyncio
 from aiohttp.test_utils import BaseTestServer, RawTestServer, TestClient, TestServer
-from aiohttp.web import Application, BaseRequest, StreamResponse
+from aiohttp.web import Application, BaseRequest, Request
+from aiohttp.web_protocol import _RequestHandler
 
-AiohttpClient = Callable[[Union[Application, BaseTestServer]], Awaitable[TestClient]]
+_Request = TypeVar("_Request", bound=BaseRequest)
+
+
+class AiohttpClient(Protocol):
+    @overload
+    async def __call__(
+        self,
+        __param: Application,
+        *,
+        server_kwargs: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> TestClient[Request, Application]: ...
+
+    @overload
+    async def __call__(
+        self,
+        __param: BaseTestServer,  # TODO(aiohttp4): BaseTestServer[_Request]
+        *,
+        server_kwargs: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> TestClient[_Request, None]: ...
+
+
+class AiohttpServer(Protocol):
+    def __call__(
+        self, app: Application, *, port: Optional[int] = None, **kwargs: Any
+    ) -> Awaitable[TestServer]: ...
+
+
+class AiohttpRawServer(Protocol):
+    def __call__(
+        self,
+        handler: _RequestHandler,  # TODO(aiohttp4): _RequestHandler[BaseRequest]
+        *,
+        port: Optional[int] = None,
+        **kwargs: Any,
+    ) -> Awaitable[RawTestServer]: ...
 
 
 LEGACY_MODE = DeprecationWarning(
@@ -28,41 +74,8 @@ def pytest_configure(config) -> None:
         config.issue_config_time_warning(LEGACY_MODE, stacklevel=2)
 
 
-@pytest.fixture
-def loop(event_loop: asyncio.AbstractEventLoop) -> asyncio.AbstractEventLoop:
-    warnings.warn(
-        "'loop' fixture is deprecated and scheduled for removal, "
-        "please use 'event_loop' instead",
-        DeprecationWarning,
-    )
-    return event_loop
-
-
-@pytest.fixture
-def proactor_loop(event_loop: asyncio.AbstractEventLoop) -> asyncio.AbstractEventLoop:
-    warnings.warn(
-        "'proactor_loop' fixture is deprecated and scheduled for removal, "
-        "please use 'event_loop' instead",
-        DeprecationWarning,
-    )
-    return event_loop
-
-
-@pytest.fixture
-def aiohttp_unused_port(
-    unused_tcp_port_factory: Callable[[], int]
-) -> Callable[[], int]:
-    warnings.warn(
-        "'aiohttp_unused_port' fixture is deprecated "
-        "and scheduled for removal, "
-        "please use 'unused_tcp_port_factory' instead",
-        DeprecationWarning,
-    )
-    return unused_tcp_port_factory
-
-
 @pytest_asyncio.fixture
-async def aiohttp_server() -> Callable[..., Awaitable[TestServer]]:
+async def aiohttp_server() -> Iterator[AiohttpServer]:
     """Factory to create a TestServer instance, given an app.
 
     aiohttp_server(app, **kwargs)
@@ -84,7 +97,7 @@ async def aiohttp_server() -> Callable[..., Awaitable[TestServer]]:
 
 
 @pytest_asyncio.fixture
-async def aiohttp_raw_server() -> Callable[..., Awaitable[RawTestServer]]:
+async def aiohttp_raw_server() -> Iterator[AiohttpRawServer]:
     """Factory to create a RawTestServer instance, given a web handler.
 
     aiohttp_raw_server(handler, **kwargs)
@@ -92,7 +105,7 @@ async def aiohttp_raw_server() -> Callable[..., Awaitable[RawTestServer]]:
     servers = []
 
     async def go(
-        handler: Callable[[BaseRequest], Awaitable[StreamResponse]],
+        handler: _RequestHandler,  # TODO(aiohttp4): _RequestHandler[BaseRequest]
         *,
         port: Optional[int] = None,
         **kwargs: Any,
@@ -108,8 +121,8 @@ async def aiohttp_raw_server() -> Callable[..., Awaitable[RawTestServer]]:
         await servers.pop().close()
 
 
-@pytest.fixture
-def aiohttp_client_cls() -> Type[TestClient]:
+@pytest_asyncio.fixture
+def aiohttp_client_cls() -> Type[TestClient[Any, Any]]:
     """
     Client class to use in ``aiohttp_client`` factory.
 
@@ -137,8 +150,8 @@ def aiohttp_client_cls() -> Type[TestClient]:
 
 @pytest_asyncio.fixture
 async def aiohttp_client(
-    aiohttp_client_cls: Type[TestClient],
-) -> Generator[AiohttpClient, None, None]:
+    aiohttp_client_cls: Type[TestClient[Any, Any]]
+) -> Iterator[AiohttpClient]:
     """Factory to create a TestClient instance.
 
     aiohttp_client(app, **kwargs)
@@ -147,12 +160,30 @@ async def aiohttp_client(
     """
     clients = []
 
+    @overload
     async def go(
-        __param: Union[Application, BaseTestServer],
+        __param: Application,
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
-    ) -> TestClient:
+    ) -> TestClient[Request, Application]: ...
+
+    @overload
+    async def go(
+        __param: BaseTestServer,  # TODO(aiohttp4): BaseTestServer[_Request]
+        *,
+        server_kwargs: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> TestClient[_Request, None]: ...
+
+    async def go(
+        __param: Union[
+            Application, BaseTestServer
+        ],  # TODO(aiohttp4): BaseTestServer[Any]
+        *,
+        server_kwargs: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> TestClient[Any, Any]:
         if isinstance(__param, Application):
             server_kwargs = server_kwargs or {}
             server = TestServer(__param, **server_kwargs)
