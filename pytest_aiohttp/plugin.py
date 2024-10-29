@@ -177,7 +177,9 @@ async def aiohttp_client(
     ) -> TestClient[_Request, None]: ...
 
     async def go(
-        __param: Union[Application, BaseTestServer],  # TODO(aiohttp4): BaseTestServer[Any]
+        __param: Union[
+            Application, BaseTestServer
+        ],  # TODO(aiohttp4): BaseTestServer[Any]
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
