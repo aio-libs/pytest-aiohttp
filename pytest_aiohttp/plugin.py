@@ -1,8 +1,7 @@
+from collections.abc import Awaitable, Iterator
 from typing import (
     Any,
-    Awaitable,
     Dict,
-    Iterator,
     Optional,
     Protocol,
     Type,
@@ -191,7 +190,7 @@ async def aiohttp_client(
         elif isinstance(__param, BaseTestServer):
             client = aiohttp_client_cls(__param, **kwargs)
         else:
-            raise ValueError("Unknown argument type: %r" % type(__param))
+            raise ValueError(f"Unknown argument type: {type(__param)!r}")
 
         await client.start_server()
         clients.append(client)
