@@ -82,9 +82,13 @@ async def aiohttp_server() -> Iterator[AiohttpServer]:
     servers = []
 
     async def go(
-        app: Application, *, port: Optional[int] = None, **kwargs: Any
+        app: Application,
+        *,
+        host: str = "127.0.0.1",
+        port: Optional[int] = None,
+        **kwargs: Any,
     ) -> TestServer:
-        server = TestServer(app, port=port)
+        server = TestServer(app, host=host, port=port)
         await server.start_server(**kwargs)
         servers.append(server)
         return server
