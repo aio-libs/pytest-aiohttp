@@ -1,6 +1,15 @@
 CHANGES
 =======
 
+1.1.0 (2025-01-23)
+------------------
+
+- Drop Python 3.8 (#57)
+
+- Export the plugin types at top-level (#60, #61)
+
+- Add host parameter to aiohttp_server fixture (#63)
+
 1.0.5 (2023-09-06)
 ------------------
 
