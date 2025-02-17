@@ -153,7 +153,7 @@ def aiohttp_client_cls() -> Type[TestClient[Any, Any]]:
 
 @pytest_asyncio.fixture
 async def aiohttp_client(
-    aiohttp_client_cls: Type[TestClient[Any, Any]]
+    aiohttp_client_cls: Type[TestClient[Any, Any]],
 ) -> Iterator[AiohttpClient]:
     """Factory to create a TestClient instance.
 
