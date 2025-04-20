@@ -125,8 +125,8 @@ async def aiohttp_raw_server() -> AsyncIterator[AiohttpRawServer]:
         await servers.pop().close()
 
 
-@pytest_asyncio.fixture
-def aiohttp_client_cls() -> Type[TestClient[Any, Any]]:
+@pytest.fixture
+def aiohttp_client_cls() -> Type[TestClient[Any, Any]]:  # type: ignore[misc]
     """
     Client class to use in ``aiohttp_client`` factory.
 
@@ -153,7 +153,7 @@ def aiohttp_client_cls() -> Type[TestClient[Any, Any]]:
 
 
 @pytest_asyncio.fixture
-async def aiohttp_client(
+async def aiohttp_client(  # type: ignore[misc]
     aiohttp_client_cls: Type[TestClient[Any, Any]],
 ) -> AsyncIterator[AiohttpClient]:
     """Factory to create a TestClient instance.
