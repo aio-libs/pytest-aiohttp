@@ -17,7 +17,7 @@ jobs:
     - uses: actions/setup-python@v5
       with:
         python-version: 3.11
-        cache: 'pip'
+        cache: pip
         cache-dependency-path: '**/requirements*.txt'
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
@@ -50,7 +50,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.pyver }}
-        cache: 'pip'
+        cache: pip
         cache-dependency-path: '**/requirements*.txt'
     - name: Install dependencies
       uses: py-actions/py-dependency-install@v4
