@@ -2,20 +2,29 @@
 name: CI
 
 on:
+  merge_group:
   push:
     branches: [master]
     tags: [v*]
   pull_request:
-    branches: [master]
-  workflow_dispatch:
 
 jobs:
   lint:
     name: Run linters
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+        cache: pip
+        cache-dependency-path: '**/requirements*.txt'
+    - name: Install dependencies
+      uses: py-actions/py-dependency-install@v4
+      with:
+        path: requirements-dev.txt
+    - name: Run mypy
+      run: mypy
     - name: Install check-wheel-content, pre-commit, and twine
       run: python -m pip install build pre-commit check-wheel-contents twine
     - name: Build package
@@ -30,21 +39,40 @@ jobs:
   test:
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        pyver: ['3.9', '3.10', '3.11', '3.12', '3.13']
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup Python ${{ matrix.pyver }}
+      uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Python ${{ matrix.python-version }} dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install .
+        python-version: ${{ matrix.pyver }}
+        cache: pip
+        cache-dependency-path: '**/requirements*.txt'
+    - name: Install dependencies
+      uses: py-actions/py-dependency-install@v4
+      with:
+        path: requirements.txt
     - name: Run pytest
       run: pytest
+
+
+  check:  # This job does nothing and is only used for the branch protection
+    if: always()
+
+    needs:
+    - lint
+    - test
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Decide whether the needed jobs succeeded or failed
+      uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}
 
 
   deploy:
