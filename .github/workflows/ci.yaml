@@ -24,8 +24,7 @@ jobs:
       with:
         path: requirements-dev.txt
     - name: Run mypy
-      run: |
-        make mypy
+      run: mypy
     - name: Install check-wheel-content, pre-commit, and twine
       run: python -m pip install build pre-commit check-wheel-contents twine
     - name: Build package
