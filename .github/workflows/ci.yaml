@@ -39,7 +39,7 @@ jobs:
   test:
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        pyver: ['3.9', '3.10', '3.11', '3.12', '3.13']
     runs-on: ubuntu-latest
 
     steps:
