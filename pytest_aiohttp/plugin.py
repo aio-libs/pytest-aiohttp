@@ -1,4 +1,4 @@
-from collections.abc import Awaitable, AsyncIterator
+from collections.abc import AsyncIterator, Awaitable
 from typing import (
     Any,
     Dict,
