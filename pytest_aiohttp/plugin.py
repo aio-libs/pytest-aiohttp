@@ -20,6 +20,7 @@ _Request = TypeVar("_Request", bound=BaseRequest)
 
 
 class AiohttpClient(Protocol):
+    # TODO(PY311): Use Unpack to specify ClientSession kwargs.
     @overload
     async def __call__(
         self,
@@ -187,6 +188,7 @@ async def aiohttp_client(
         server_kwargs: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
     ) -> TestClient[Any, Any]:
+        # TODO(PY311): Use Unpack to specify ClientSession kwargs and server_kwargs.
         if isinstance(__param, Application):
             server_kwargs = server_kwargs or {}
             server = TestServer(__param, **server_kwargs)
