@@ -1,4 +1,4 @@
-from collections.abc import Awaitable, Iterator
+from collections.abc import Awaitable, AsyncIterator
 from typing import (
     Any,
     Dict,
@@ -22,7 +22,7 @@ _Request = TypeVar("_Request", bound=BaseRequest)
 class AiohttpClient(Protocol):
     # TODO(PY311): Use Unpack to specify ClientSession kwargs.
     @overload
-    async def __call__(
+    async def __call__(  # type: ignore[misc]
         self,
         __param: Application,
         *,
@@ -31,7 +31,7 @@ class AiohttpClient(Protocol):
     ) -> TestClient[Request, Application]: ...
 
     @overload
-    async def __call__(
+    async def __call__(  # type: ignore[misc]
         self,
         __param: BaseTestServer,  # TODO(aiohttp4): BaseTestServer[_Request]
         *,
@@ -65,7 +65,7 @@ LEGACY_MODE = DeprecationWarning(
 
 
 @pytest.hookimpl(tryfirst=True)
-def pytest_configure(config) -> None:
+def pytest_configure(config: pytest.Config) -> None:
     val = config.getoption("asyncio_mode")
     if val is None:
         val = config.getini("asyncio_mode")
@@ -75,7 +75,7 @@ def pytest_configure(config) -> None:
 
 
 @pytest_asyncio.fixture
-async def aiohttp_server() -> Iterator[AiohttpServer]:
+async def aiohttp_server() -> AsyncIterator[AiohttpServer]:
     """Factory to create a TestServer instance, given an app.
 
     aiohttp_server(app, **kwargs)
@@ -101,7 +101,7 @@ async def aiohttp_server() -> Iterator[AiohttpServer]:
 
 
 @pytest_asyncio.fixture
-async def aiohttp_raw_server() -> Iterator[AiohttpRawServer]:
+async def aiohttp_raw_server() -> AsyncIterator[AiohttpRawServer]:
     """Factory to create a RawTestServer instance, given a web handler.
 
     aiohttp_raw_server(handler, **kwargs)
@@ -155,7 +155,7 @@ def aiohttp_client_cls() -> Type[TestClient[Any, Any]]:
 @pytest_asyncio.fixture
 async def aiohttp_client(
     aiohttp_client_cls: Type[TestClient[Any, Any]],
-) -> Iterator[AiohttpClient]:
+) -> AsyncIterator[AiohttpClient]:
     """Factory to create a TestClient instance.
 
     aiohttp_client(app, **kwargs)
@@ -165,7 +165,7 @@ async def aiohttp_client(
     clients = []
 
     @overload
-    async def go(
+    async def go(  # type: ignore[misc]
         __param: Application,
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
@@ -173,7 +173,7 @@ async def aiohttp_client(
     ) -> TestClient[Request, Application]: ...
 
     @overload
-    async def go(
+    async def go(  # type: ignore[misc]
         __param: BaseTestServer,  # TODO(aiohttp4): BaseTestServer[_Request]
         *,
         server_kwargs: Optional[Dict[str, Any]] = None,
