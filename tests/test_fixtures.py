@@ -4,8 +4,7 @@ pytest_plugins = "pytester"
 
 
 def test_aiohttp_plugin(testdir: pytest.Testdir) -> None:
-    testdir.makepyfile(
-        """\
+    testdir.makepyfile("""\
 import pytest
 from unittest import mock
 
@@ -102,15 +101,13 @@ async def test_custom_port_test_server(aiohttp_server, unused_tcp_port):
     app = await create_app()
     server = await aiohttp_server(app, port=unused_tcp_port)
     assert server.port == unused_tcp_port
-"""
-    )
+""")
     result = testdir.runpytest("--asyncio-mode=auto")
     result.assert_outcomes(passed=8)
 
 
 def test_aiohttp_raw_server(testdir: pytest.Testdir) -> None:
-    testdir.makepyfile(
-        """\
+    testdir.makepyfile("""\
 import pytest
 
 from aiohttp import web
@@ -136,15 +133,13 @@ async def test_hello(cli) -> None:
     assert resp.status == 200
     text = await resp.text()
     assert 'OK' in text
-"""
-    )
+""")
     result = testdir.runpytest("--asyncio-mode=auto")
     result.assert_outcomes(passed=1)
 
 
 def test_aiohttp_client_cls_fixture_custom_client_used(testdir: pytest.Testdir) -> None:
-    testdir.makepyfile(
-        """
+    testdir.makepyfile("""
 import pytest
 from aiohttp.web import Application
 from aiohttp.test_utils import TestClient
@@ -163,24 +158,20 @@ async def test_hello(aiohttp_client) -> None:
     client = await aiohttp_client(Application())
     assert isinstance(client, CustomClient)
 
-"""
-    )
+""")
     result = testdir.runpytest("--asyncio-mode=auto")
     result.assert_outcomes(passed=1)
 
 
 def test_aiohttp_client_cls_fixture_factory(testdir: pytest.Testdir) -> None:
-    testdir.makeconftest(
-        """\
+    testdir.makeconftest("""\
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "rest: RESTful API tests")
     config.addinivalue_line("markers", "graphql: GraphQL API tests")
 
-"""
-    )
-    testdir.makepyfile(
-        """
+""")
+    testdir.makepyfile("""
 import pytest
 from aiohttp.web import Application
 from aiohttp.test_utils import TestClient
@@ -214,7 +205,6 @@ async def test_graphql(aiohttp_client) -> None:
     client = await aiohttp_client(Application())
     assert isinstance(client, GraphQLClient)
 
-"""
-    )
+""")
     result = testdir.runpytest("--asyncio-mode=auto")
     result.assert_outcomes(passed=2)
