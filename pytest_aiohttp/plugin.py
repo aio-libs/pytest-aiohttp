@@ -1,5 +1,5 @@
-from collections.abc import AsyncIterator, Awaitable
-from typing import Any, Mapping, Protocol, Type, TypeVar, overload
+from collections.abc import AsyncIterator, Awaitable, Mapping
+from typing import Any, Protocol, Type, TypeVar, overload
 
 import pytest
 import pytest_asyncio
