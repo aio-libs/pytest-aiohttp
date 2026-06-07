@@ -1,14 +1,5 @@
-from collections.abc import AsyncIterator, Awaitable
-from typing import (
-    Any,
-    Dict,
-    Optional,
-    Protocol,
-    Type,
-    TypeVar,
-    Union,
-    overload,
-)
+from collections.abc import AsyncIterator, Awaitable, Mapping
+from typing import Any, Protocol, Type, TypeVar, overload
 
 import pytest
 import pytest_asyncio
@@ -26,7 +17,7 @@ class AiohttpClient(Protocol):
         self,
         __param: Application,
         *,
-        server_kwargs: Optional[Dict[str, Any]] = None,
+        server_kwargs: Mapping[str, Any] | None = None,
         **kwargs: Any,
     ) -> TestClient[Request, Application]: ...
 
@@ -35,14 +26,14 @@ class AiohttpClient(Protocol):
         self,
         __param: BaseTestServer,  # TODO(aiohttp4): BaseTestServer[_Request]
         *,
-        server_kwargs: Optional[Dict[str, Any]] = None,
+        server_kwargs: Mapping[str, Any] | None = None,
         **kwargs: Any,
     ) -> TestClient[_Request, None]: ...
 
 
 class AiohttpServer(Protocol):
     def __call__(
-        self, app: Application, *, port: Optional[int] = None, **kwargs: Any
+        self, app: Application, *, port: int | None = None, **kwargs: Any
     ) -> Awaitable[TestServer]: ...
 
 
@@ -51,7 +42,7 @@ class AiohttpRawServer(Protocol):
         self,
         handler: _RequestHandler,  # TODO(aiohttp4): _RequestHandler[BaseRequest]
         *,
-        port: Optional[int] = None,
+        port: int | None = None,
         **kwargs: Any,
     ) -> Awaitable[RawTestServer]: ...
 
@@ -86,7 +77,7 @@ async def aiohttp_server() -> AsyncIterator[AiohttpServer]:
         app: Application,
         *,
         host: str = "127.0.0.1",
-        port: Optional[int] = None,
+        port: int | None = None,
         **kwargs: Any,
     ) -> TestServer:
         server = TestServer(app, host=host, port=port)
@@ -111,7 +102,7 @@ async def aiohttp_raw_server() -> AsyncIterator[AiohttpRawServer]:
     async def go(
         handler: _RequestHandler,  # TODO(aiohttp4): _RequestHandler[BaseRequest]
         *,
-        port: Optional[int] = None,
+        port: int | None = None,
         **kwargs: Any,
     ) -> RawTestServer:
         server = RawTestServer(handler, port=port)
@@ -168,7 +159,7 @@ async def aiohttp_client(  # type: ignore[misc]
     async def go(
         __param: Application,
         *,
-        server_kwargs: Optional[Dict[str, Any]] = None,
+        server_kwargs: Mapping[str, Any] | None = None,
         **kwargs: Any,
     ) -> TestClient[Request, Application]: ...
 
@@ -176,16 +167,14 @@ async def aiohttp_client(  # type: ignore[misc]
     async def go(
         __param: BaseTestServer,  # TODO(aiohttp4): BaseTestServer[_Request]
         *,
-        server_kwargs: Optional[Dict[str, Any]] = None,
+        server_kwargs: Mapping[str, Any] | None = None,
         **kwargs: Any,
     ) -> TestClient[_Request, None]: ...
 
     async def go(
-        __param: Union[
-            Application, BaseTestServer
-        ],  # TODO(aiohttp4): BaseTestServer[Any]
+        __param: Application | BaseTestServer,  # TODO(aiohttp4): BaseTestServer[Any]
         *,
-        server_kwargs: Optional[Dict[str, Any]] = None,
+        server_kwargs: Mapping[str, Any] | None = None,
         **kwargs: Any,
     ) -> TestClient[Any, Any]:
         # TODO(PY311): Use Unpack to specify ClientSession kwargs and server_kwargs.

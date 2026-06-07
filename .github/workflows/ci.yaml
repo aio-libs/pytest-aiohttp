@@ -13,8 +13,8 @@ jobs:
     name: Run linters
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.2.2
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@v6.0.3
+    - uses: actions/setup-python@v6
       with:
         python-version: 3.11
         cache: pip
@@ -39,14 +39,14 @@ jobs:
   test:
     strategy:
       matrix:
-        pyver: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        pyver: ['3.10', '3.11', '3.12', '3.13', '3.14']
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4.2.2
+      uses: actions/checkout@v6.0.3
     - name: Setup Python ${{ matrix.pyver }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.pyver }}
         cache: pip
@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4.2.2
+      uses: actions/checkout@v6.0.3
       with:
         fetch-depth: 0
     - name: Install build
@@ -92,7 +92,7 @@ jobs:
     - name: Build package
       run: python -m build
     - name: PyPI upload
-      uses: pypa/gh-action-pypi-publish@v1.12.4
+      uses: pypa/gh-action-pypi-publish@v1.14.0
       with:
         packages_dir: dist
         password: ${{ secrets.PYPI_API_TOKEN }}
